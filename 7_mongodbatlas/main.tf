@@ -6,7 +6,7 @@ terraform {
     }
 
     hcp = {
-      source = "hashicorp/hcp"
+      source  = "hashicorp/hcp"
       version = "~> 0.83.0"
     }
   }
@@ -17,8 +17,8 @@ provider "hcp" {}
 # Specify the app in the project (one app_name per data block)
 data "hcp_vault_secrets_app" "mongodb-atlas" {
   app_name = "mongodb-atlas"
-# Limit the scope to only one or more secrets in the app
-# secret_name = “secret-name-1” “secret-name-2”
+  # Limit the scope to only one or more secrets in the app
+  # secret_name = “secret-name-1” “secret-name-2”
 }
 
 # Replace your existing secret references with
@@ -26,12 +26,12 @@ data "hcp_vault_secrets_app" "mongodb-atlas" {
 
 
 provider "mongodbatlas" {
-  public_key  = data.hcp_vault_secrets_app.mongodb-atlas.secrets.value["MONGODB_ATLAS_PUBLIC"]
-  private_key = data.hcp_vault_secrets_app.mongodb-atlas.secrets.value["MONGODB_ATLAS_PRIVATE"]
+  public_key  = data.hcp_vault_secrets_app.mongodb-atlas.secrets["mongodb_atlas_public"]
+  private_key = data.hcp_vault_secrets_app.mongodb-atlas.secrets["mongodb_atlas_private"]
 }
 
 resource "mongodbatlas_cluster" "lifetimecluster" {
-  project_id                  = data.hcp_vault_secrets_app.mongodb-atlas.secrets.value["MONGODB_PROJECT"]
+  project_id                  = data.hcp_vault_secrets_app.mongodb-atlas.secrets["mongodb_atlas_project"]
   name                        = "TerraformAtLifetime"
   cluster_type                = "REPLICASET"
   provider_name               = "AWS"
