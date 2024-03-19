@@ -97,7 +97,15 @@ build {
       "unzip nomad_1.7.6_linux_amd64.zip",
       "sudo chown root:root nomad",
       "sudo mv nomad /usr/local/bin/",
-      "nomad -autocomplete-install"
+      "complete -C /usr/local/bin/nomad nomad",
+      "sudo mkdir --parents /opt/nomad",
+      "sudo useradd --system --home /etc/nomad.d --shell /bin/false nomad",
+      "sudo apt-get install -y consul",
+      "curl -fsSL https://get.docker.com -o get-docker.sh",
+      "sh ./get-docker.sh",
+      "curl -L -o cni-plugins.tgz \"https://github.com/containernetworking/plugins/releases/download/v1.3.0/cni-plugins-linux-$([ $(uname -m) = aarch64 ] && echo arm64 || echo amd64)\"-v1.3.0.tgz",
+      "sudo mkdir -p /opt/cni/bin",
+      "sudo tar -C /opt/cni/bin -xzf cni-plugins.tgz"
     ]
   }
 }

@@ -8,10 +8,15 @@ terraform {
 
 provider "tfe" {}
 
+data "tfe_project" "project" {
+  name = var.tfc_project_name
+  organization = var.tfc_organization
+}
+
 resource "tfe_workspace" "networking" {
   name          = "1_networking"
   organization  = var.tfc_organization
-  project_id    = var.tfc_project_id
+  project_id    = data.tfe_project.project.id
 
   vcs_repo {
     identifier = var.repo_identifier
@@ -28,7 +33,7 @@ resource "tfe_workspace" "networking" {
 resource "tfe_workspace" "hcp_clusters" {
   name          = "2_hcp-clusters"
   organization  = var.tfc_organization
-  project_id    = var.tfc_project_id
+  project_id    = data.tfe_project.project.id
 
   vcs_repo {
     identifier = var.repo_identifier
@@ -45,7 +50,7 @@ resource "tfe_workspace" "hcp_clusters" {
 resource "tfe_workspace" "vault_auth_config" {
   name          = "3_vault-auth-config"
   organization  = var.tfc_organization
-  project_id    = var.tfc_project_id
+  project_id    = data.tfe_project.project.id
 
   vcs_repo {
     identifier = var.repo_identifier
@@ -62,7 +67,7 @@ resource "tfe_workspace" "vault_auth_config" {
 resource "tfe_workspace" "boundary_config" {
   name          = "4_boundary-config"
   organization  = var.tfc_organization
-  project_id    = var.tfc_project_id
+  project_id    = data.tfe_project.project.id
 
   vcs_repo {
     identifier = var.repo_identifier
@@ -79,7 +84,7 @@ resource "tfe_workspace" "boundary_config" {
 resource "tfe_workspace" "nomad_cluster" {
   name          = "5_nomad-cluster"
   organization  = var.tfc_organization
-  project_id    = var.tfc_project_id
+  project_id    = data.tfe_project.project.id
 
   vcs_repo {
     identifier = var.repo_identifier
@@ -96,7 +101,7 @@ resource "tfe_workspace" "nomad_cluster" {
 resource "tfe_workspace" "nomad_nodes" {
   name          = "6_nomad-nodes"
   organization  = var.tfc_organization
-  project_id    = var.tfc_project_id
+  project_id    = data.tfe_project.project.id
 
   vcs_repo {
     identifier = var.repo_identifier
