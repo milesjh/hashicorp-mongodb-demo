@@ -115,6 +115,23 @@ resource "tfe_workspace" "nomad_nodes" {
   global_remote_state = true
 }
 
+resource "tfe_workspace" "mongodbatlas" {
+  name          = "7_mongodbatlas"
+  organization  = var.tfc_organization
+  project_id    = data.tfe_project.project.id
+
+  vcs_repo {
+    identifier = var.repo_identifier
+    oauth_token_id = var.oauth_token_id
+    branch = var.repo_branch
+  }
+
+  working_directory = "7_mongodbatlas"
+  queue_all_runs = false
+  assessments_enabled = false
+  global_remote_state = true
+}
+
 resource "tfe_workspace_run" "networking" {
   workspace_id    = tfe_workspace.networking.id
 
@@ -207,6 +224,24 @@ resource "tfe_workspace_run" "nomad_cluster" {
 resource "tfe_workspace_run" "nomad_nodes" {
   depends_on = [ tfe_workspace_run.nomad_cluster ]
   workspace_id    = tfe_workspace.nomad_nodes.id
+
+  apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+  destroy {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+}
+
+resource "tfe_workspace_run" "mongodbatlas" {
+  depends_on = [ tfe_workspace_run.nomad_nodes ]
+  workspace_id    = tfe_workspace.mongodbatlas.id
 
   apply {
     manual_confirm    = false
