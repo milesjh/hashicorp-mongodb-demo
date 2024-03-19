@@ -1,12 +1,3 @@
-packer {
-  required_plugins {
-    amazon = {
-      source  = "github.com/hashicorp/amazon"
-      version = "~> 1"
-    }
-  }
-}
-
 variable "subnet_id" {
   type = string
 }
@@ -22,7 +13,7 @@ source "amazon-ebs" "amd" {
   associate_public_ip_address = true
   source_ami_filter {
     filters = {
-      name                = "ubuntu/images/hvm-ssd/ubuntu-lunar-23.04-amd64-server-*"
+      name                = "ubuntu/images/hvm-ssd-gp3/ubuntu-mantic-23.10-amd64-server-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
@@ -45,7 +36,7 @@ source "amazon-ebs" "arm" {
   associate_public_ip_address = true
   source_ami_filter {
     filters = {
-      name                = "ubuntu/images/hvm-ssd/ubuntu-lunar-23.04-arm64-server-*"
+      name                = "ubuntu/images/hvm-ssd-gp3/ubuntu-mantic-23.10-arm64-server-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
@@ -69,12 +60,12 @@ build {
   ]
 
   hcp_packer_registry {
-    bucket_name = "ubuntu-lunar-hashi"
-    description = "Ubuntu Lunar Lobster with Nomad and Consul installed"
+    bucket_name = "ubuntu-mantic-hashi"
+    description = "Ubuntu Mantic Minotaur with Nomad and Consul installed"
 
     bucket_labels = {
       "os"             = "Ubuntu",
-      "ubuntu-version" = "23.04",
+      "ubuntu-version" = "23.10",
     }
 
     build_labels = {
@@ -86,21 +77,12 @@ build {
 
   provisioner "shell" {
     inline = [
-      "sudo add-apt-repository universe",
-      "sudo apt-get update -y && sudo apt-get upgrade -y",
+      "sudo apt update && sudo apt install gpg -y",
       "wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg",
-      "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
-      //"echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) test\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
-      "sudo cat /etc/apt/sources.list",
-      "sudo apt-get install -y dialog apt-utils unzip",
-      "curl --silent --remote-name https://releases.hashicorp.com/nomad/1.7.6/nomad_1.7.6_linux_amd64.zip",
-      "unzip nomad_1.7.6_linux_amd64.zip",
-      "sudo chown root:root nomad",
-      "sudo mv nomad /usr/local/bin/",
-      "complete -C /usr/local/bin/nomad nomad",
-      "sudo mkdir --parents /opt/nomad",
-      "sudo useradd --system --home /etc/nomad.d --shell /bin/false nomad",
-      "sudo apt-get install -y consul",
+      "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee /etc/apt/sources.list.d/hashicorp.list",
+      // "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) test\" | sudo tee /etc/apt/sources.list.d/hashicorp.list",
+      "sudo apt update && sudo apt upgrade -y",
+      "sudo apt install -y consul nomad-enterprise",
       "curl -fsSL https://get.docker.com -o get-docker.sh",
       "sh ./get-docker.sh",
       "curl -L -o cni-plugins.tgz \"https://github.com/containernetworking/plugins/releases/download/v1.3.0/cni-plugins-linux-$([ $(uname -m) = aarch64 ] && echo arm64 || echo amd64)\"-v1.3.0.tgz",
