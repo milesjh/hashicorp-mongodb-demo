@@ -4,6 +4,12 @@ terraform {
       version = "~> 0.49.0"
     }
   }
+  cloud {
+    organization = "milesjh-sandbox"
+    workspaces {
+      name = "0_control-workspace"
+    }
+  }
 }
 
 provider "tfe" {}
