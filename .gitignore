@@ -32,3 +32,10 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+
+doormat-prereqs/.terraform
+doormat-prereqs/.terraform.lock.hcl
+doormat-prereqs/terraform.tfstate
+doormat-prereqs/terraform.tfstate.backup
+.DS_Store
