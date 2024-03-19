@@ -194,25 +194,25 @@ resource "aws_alb_listener" "nomad" {
   }
 }
 
-data "hcp_packer_image" "ubuntu_mantic_hashi_amd" {
+data "hcp_packer_artifact" "ubuntu_mantic_hashi_amd" {
   bucket_name    = "ubuntu-mantic-hashi"
   component_type = "amazon-ebs.amd"
-  channel        = "latest"
-  cloud_provider = "aws"
+  channel_name        = "latest"
+  platform = "aws"
   region         = var.region
 }
 
-data "hcp_packer_image" "ubuntu_mantic_hashi_arm" {
+data "hcp_packer_artifact" "ubuntu_mantic_hashi_arm" {
   bucket_name    = "ubuntu-mantic-hashi"
   component_type = "amazon-ebs.arm"
-  channel        = "latest"
-  cloud_provider = "aws"
+  channel_name        = "latest"
+  platform = "aws"
   region         = var.region
 }
 
 resource "aws_launch_template" "nomad_server_launch_template" {
   name_prefix   = "lt-"
-  image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_amd.cloud_image_id
+  image_id      = data.hcp_packer_artifact.ubuntu_mantic_hashi_amd.cloud_image_id
   instance_type = "t3a.micro"
 
   network_interfaces {
