@@ -26,12 +26,12 @@ data "hcp_vault_secrets_app" "mongodb-atlas" {
 
 
 provider "mongodbatlas" {
-  public_key  = data.hcp_vault_secrets_app.mongodb-atlas.MONGODB_ATLAS_PUBLIC
-  private_key = data.hcp_vault_secrets_app.mongodb-atlas.MONGODB_ATLAS_PRIVATE
+  public_key  = data.hcp_vault_secrets_app.mongodb-atlas.secrets["MONGODB_ATLAS_PUBLIC"]
+  private_key = data.hcp_vault_secrets_app.mongodb-atlas.secrets["MONGODB_ATLAS_PRIVATE"]
 }
 
 resource "mongodbatlas_cluster" "lifetimecluster" {
-  project_id                  = data.hcp_vault_secrets_app.mongodb-atlas.MONGODB_PROJECT
+  project_id                  = data.hcp_vault_secrets_app.mongodb-atlas.secrets["MONGODB_PROJECT"]
   name                        = "TerraformAtLifetime"
   cluster_type                = "REPLICASET"
   provider_name               = "AWS"
