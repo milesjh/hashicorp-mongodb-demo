@@ -22,16 +22,16 @@ data "hcp_vault_secrets_app" "mongodb-atlas" {
 }
 
 # Replace your existing secret references with
-# data.hcp-vault-secrets_app.mongodb-atlas.secret-name
+# data.hcp_vault_secrets_app.mongodb-atlas.secret-name
 
 
 provider "mongodbatlas" {
-  public_key  = data.hcp-vault-secrets_app.mongodb-atlas.MONGODB_ATLAS_PUBLIC
-  private_key = data.hcp-vault-secrets_app.mongodb-atlas.MONGODB_ATLAS_PRIVATE
+  public_key  = data.hcp_vault_secrets_app.mongodb-atlas.MONGODB_ATLAS_PUBLIC
+  private_key = data.hcp_vault_secrets_app.mongodb-atlas.MONGODB_ATLAS_PRIVATE
 }
 
 resource "mongodbatlas_cluster" "lifetimecluster" {
-  project_id                  = data.hcp-vault-secrets_app.mongodb-atlas.MONGODB_PROJECT
+  project_id                  = data.hcp_vault_secrets_app.mongodb-atlas.MONGODB_PROJECT
   name                        = "TerraformAtLifetime"
   cluster_type                = "REPLICASET"
   provider_name               = "AWS"
