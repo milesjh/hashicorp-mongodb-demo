@@ -12,6 +12,7 @@ variable "repo_identifier" {
 
 variable "repo_branch" {
   type = string
+  default = "main"
 }
 
 variable "oauth_token_id" {

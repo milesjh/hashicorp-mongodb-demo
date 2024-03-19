@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    amazon = {
+      source  = "github.com/hashicorp/amazon"
+      version = "~> 1"
+    }
+  }
+}
+
 variable "subnet_id" {
   type = string
 }
@@ -77,16 +86,18 @@ build {
 
   provisioner "shell" {
     inline = [
+      "sudo add-apt-repository universe",
+      "sudo apt-get update -y && sudo apt-get upgrade -y",
       "wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg",
       "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
       //"echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) test\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
-      "sudo apt update && sudo apt upgrade -y",
-      "sudo apt install -y consul nomad-enterprise",
-      "curl -fsSL https://get.docker.com -o get-docker.sh",
-      "sh ./get-docker.sh",
-      "curl -L -o cni-plugins.tgz \"https://github.com/containernetworking/plugins/releases/download/v1.3.0/cni-plugins-linux-$([ $(uname -m) = aarch64 ] && echo arm64 || echo amd64)\"-v1.3.0.tgz",
-      "sudo mkdir -p /opt/cni/bin",
-      "sudo tar -C /opt/cni/bin -xzf cni-plugins.tgz"
+      "sudo cat /etc/apt/sources.list",
+      "sudo apt-get install -y dialog apt-utils unzip",
+      "curl --silent --remote-name https://releases.hashicorp.com/nomad/1.7.6/nomad_1.7.6_linux_amd64.zip",
+      "unzip nomad_1.7.6_linux_amd64.zip",
+      "sudo chown root:root nomad",
+      "sudo mv nomad /usr/local/bin/",
+      "nomad -autocomplete-install"
     ]
   }
 }

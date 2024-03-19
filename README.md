@@ -123,7 +123,7 @@ export HCP_CLIENT_SECRET=************************
 ```
 4) Trigger a packer build specifying a pre-existing, publicly accesible subnet of your AWS account for build to happen within
 ```
-packer build -var "subnet_id=subnet-xxxxxxxxxxxx" ubuntu.pkr.hcl
+packer build -var "subnet_id=subnet-00ba37d90db8bc088" ubuntu.pkr.hcl
 ```
 
 ## Triggering the deployment
