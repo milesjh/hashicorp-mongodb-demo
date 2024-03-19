@@ -6,17 +6,17 @@ terraform {
 
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.8.0"
+      version = "~> 5.41.0"
     }
 
     boundary = {
       source = "hashicorp/boundary"
-      version = "~> 1.1.9"
+      version = "~> 1.1.14"
     }
 
     vault = {
       source = "hashicorp/vault"
-      version = "~> 3.18.0"
+      version = "~> 3.25.0"
     }
   }
 }
