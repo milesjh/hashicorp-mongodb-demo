@@ -249,7 +249,7 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
         consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
         consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
         nomad_node_pool    = "x86",
-        nomad_servers      = [ "provider=aws tag_key=nomad tag_value=server", "'${data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint}'" ],
+        nomad_servers      = "provider=aws tag_key=nomad tag_value=server",
         vault_ssh_pub_key  = data.terraform_remote_state.nomad_cluster.outputs.ssh_ca_pub_key,
         vault_public_endpoint = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
       }
