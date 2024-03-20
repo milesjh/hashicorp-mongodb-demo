@@ -36,5 +36,5 @@ resource "vault_database_secret_backend_role" "mdba-role" {
   backend             = "database"
   name                = "atlas-dev"
   db_name             = vault_database_secret_backend_connection.mongodbatlas.name
-  creation_statements = ["{'database_name': 'admin','roles': [{'databaseName':'admin','roleName':'atlasAdmin'}]}"]
+  creation_statements = ["{'database_name': '${mongodbatlas_cluster.lifetimecluster.name}','roles': [{'databaseName':'${mongodbatlas_cluster.lifetimecluster.name}','roleName':'atlasAdmin'}]}"]
 }
