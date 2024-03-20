@@ -25,6 +25,12 @@ terraform {
       version = "2.18.0"
     }
   }
+  cloud {
+    organization = "milesjh-sandbox"
+    workspaces {
+      name = "8_workload"
+    }
+  }
 }
 
 provider "doormat" {}
@@ -129,7 +135,7 @@ resource "vault_database_secrets_mount" "mongodb" {
       mongodb[0].password
     ]
   }
-  path = "mongodb"
+  path = "database"
 
   mongodb {
     name                 = "mongodb-on-nomad"
