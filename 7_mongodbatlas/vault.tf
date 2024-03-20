@@ -1,3 +1,5 @@
+variable "tfc_organization" {}
+
 data "terraform_remote_state" "nomad_cluster" {
   backend = "remote"
 
@@ -21,7 +23,7 @@ data "vault_kv_secret_v2" "bootstrap" {
 resource "vault_database_secret_backend_connection" "mongodbatlas" {
   backend       = "database"
   name          = "mongodbatlas"
-  allowed_roles = "*"
+  allowed_roles = ["*"]
 
   mongodbatlas {
     public_key  = data.hcp_vault_secrets_app.mongodb-atlas.secrets["mongodb_atlas_public"]
