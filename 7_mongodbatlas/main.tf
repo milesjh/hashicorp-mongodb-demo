@@ -38,3 +38,25 @@ resource "mongodbatlas_cluster" "lifetimecluster" {
   provider_region_name        = "US_EAST_1"
   provider_instance_size_name = "M10"
 }
+
+resource "mongodbatlas_database_user" "user1" {
+  username           = "terraformUser"
+  password           = data.hcp_vault_secrets_app.mongodb-atlas.secrets["mongodb_atlas_user_password"]
+  project_id         = data.hcp_vault_secrets_app.mongodb-atlas.secrets["mongodb_atlas_project"]
+  auth_database_name = "admin"
+
+  roles {
+    role_name     = "readAnyDatabase"
+    database_name = "admin"
+  }
+
+  labels {
+    key   = "Name"
+    value = "DB User1"
+  }
+
+  scopes {
+    name = mongodbatlas_cluster.lifetimecluster.name
+    type = "CLUSTER"
+  }
+}
