@@ -40,8 +40,8 @@ resource "mongodbatlas_cluster" "lifetimecluster" {
 }
 
 resource "mongodbatlas_database_user" "user1" {
-  username           = ""
-  password           = ""
+  username           = "terraformUser"
+  password           = data.hcp_vault_secrets_app.mongodb-atlas.secrets["mongodb_atlas_user_password"]
   project_id         = data.hcp_vault_secrets_app.mongodb-atlas.secrets["mongodb_atlas_project"]
   auth_database_name = "admin"
 
