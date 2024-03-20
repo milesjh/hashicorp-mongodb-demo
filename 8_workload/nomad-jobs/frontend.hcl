@@ -36,7 +36,7 @@ job "demo-frontend" {
             }
             template {
                 data = <<EOH
-MONGOKU_DEFAULT_HOST={{ with secret "database/creds/demo" }}{{ .Data.username }}:{{ .Data.password }}{{ end }}@127.0.0.1:27017
+MONGOKU_DEFAULT_HOST={{ with secret "database/creds/demo" }}{{ .Data.username }}:{{ .Data.password }}{{ end }}@18.218.13.23:27017
 EOH
                 destination = "secrets/mongoku.env"
                 env         = true
