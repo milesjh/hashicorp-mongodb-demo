@@ -21,8 +21,9 @@ server {
   bootstrap_expect = 3
 }
 client {
-  node_pool = "${node_pool}"
+  node_pool = "${nomad_node_pool}"
   enabled = true
+  servers = ["${nomad_servers}"]
 }
 consul {
   token = "${consul_acl_token}"
