@@ -24,7 +24,7 @@ client {
   node_pool = "${nomad_node_pool}"
   enabled = true
   server_join {
-    retry_join = "${nomad_servers}"
+    retry_join = ["${nomad_servers}"]
   }
 }
 consul {
