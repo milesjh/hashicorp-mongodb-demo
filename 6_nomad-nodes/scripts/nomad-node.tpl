@@ -23,7 +23,9 @@ server {
 client {
   node_pool = "${nomad_node_pool}"
   enabled = true
-  servers = ["${nomad_servers}"]
+  server_join {
+    retry_join = "${nomad_servers}"
+  }
 }
 consul {
   token = "${consul_acl_token}"

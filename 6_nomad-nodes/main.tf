@@ -174,7 +174,7 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
         consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
         consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
         nomad_node_pool    = "x86",
-        nomad_servers      = data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint,
+        nomad_servers      = [ "provider=aws tag_key=nomad tag_value=server", "'${data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint}'" ],
         vault_ssh_pub_key  = data.terraform_remote_state.nomad_cluster.outputs.ssh_ca_pub_key,
         vault_public_endpoint = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
       }
@@ -198,6 +198,12 @@ resource "aws_autoscaling_group" "nomad_client_x86_asg" {
   launch_template {
     id = aws_launch_template.nomad_client_x86_launch_template.id
     version = aws_launch_template.nomad_client_x86_launch_template.latest_version
+  }
+
+  tag {
+    key = "nomad"
+    value = "client"
+    propagate_at_launch = true
   }
   
   vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
@@ -243,7 +249,7 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
         consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
         consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
         nomad_node_pool    = "x86",
-        nomad_servers      = data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint,
+        nomad_servers      = [ "provider=aws tag_key=nomad tag_value=server", "'${data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint}'" ],
         vault_ssh_pub_key  = data.terraform_remote_state.nomad_cluster.outputs.ssh_ca_pub_key,
         vault_public_endpoint = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
       }
@@ -270,6 +276,12 @@ resource "aws_autoscaling_group" "nomad_client_arm_asg" {
   }
   
   vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
+
+  tag {
+    key = "nomad"
+    value = "client"
+    propagate_at_launch = true
+  }
 
   instance_refresh {
     strategy = "Rolling"

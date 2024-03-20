@@ -14,7 +14,7 @@ terraform {
       source = "hashicorp/vault"
       version = "~> 3.25.0"
     }
-    
+
     hcp = {
       source  = "hashicorp/hcp"
       version = "~> 0.83.0"
@@ -264,6 +264,12 @@ resource "aws_autoscaling_group" "nomad_server_asg" {
   launch_template {
     id = aws_launch_template.nomad_server_launch_template.id
     version = aws_launch_template.nomad_server_launch_template.latest_version
+  }
+  
+  tag {
+    key = "nomad"
+    value = "server"
+    propagate_at_launch = true
   }
   
   vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
