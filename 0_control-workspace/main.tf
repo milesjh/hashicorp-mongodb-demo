@@ -263,7 +263,7 @@ resource "tfe_workspace_run" "nomad_nodes" {
 }
 
 resource "tfe_workspace_run" "mongodbatlas" {
-  depends_on = [ tfe_workspace_run.nomad_nodes ]
+  depends_on = [ tfe_workspace_run.workload ]
   workspace_id    = tfe_workspace.mongodbatlas.id
 
   apply {
@@ -281,7 +281,7 @@ resource "tfe_workspace_run" "mongodbatlas" {
 }
 
 resource "tfe_workspace_run" "workload" {
-  depends_on = [ tfe_workspace_run.mongodbatlas ]
+  depends_on = [ tfe_workspace_run.nomad_nodes ]
   workspace_id    = tfe_workspace.workload.id
 
   apply {
