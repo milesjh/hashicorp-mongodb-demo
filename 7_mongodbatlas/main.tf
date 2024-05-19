@@ -39,6 +39,11 @@ resource "mongodbatlas_cluster" "lifetimecluster" {
   provider_instance_size_name = "M10"
 }
 
+import {
+  id = "6241fc75cc1e8a0eb24198f1-terraformUser-admin"
+  to = mongodbatlas_database_user.user1
+}
+
 resource "mongodbatlas_database_user" "user1" {
   username           = "terraformUser"
   password           = data.hcp_vault_secrets_app.mongodb-atlas.secrets["mongodb_atlas_user_password"]
